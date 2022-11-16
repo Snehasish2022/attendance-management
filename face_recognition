@@ -1,0 +1,33 @@
+import cv2
+import face_recognition
+# loading image in img1 variable
+img1=face_recognition.load_image_file('obama.jpg')
+# converting color from BGR TO RGB
+img1=cv2.cvtColor(img1,cv2.COLOR_BGR2RGB)
+img1test=face_recognition.load_image_file('biden.jpg')
+img1test=cv2.cvtColor(img1test,cv2.COLOR_BGR2RGB)
+# GENERATING THE COORDINATES OF THE IMAGE
+face=face_recognition.face_locations(img1)[0]
+# print(face)
+# STORING 128 DIFFERENT ENCODING OF THE IMAGE
+encodeFace=face_recognition.face_encodings(img1)[0]
+# print(encodeFace)
+# GENERATING RECTANGLE BOX TARGETING  THE FACE
+cv2.rectangle(img1,(face[3],face[0]),(face[1],face[2]),(0,255,0),3)
+
+facetest=face_recognition.face_locations(img1test)[0]
+encodetestFace=face_recognition.face_encodings(img1test)[0]
+cv2.rectangle(img1test,(facetest[3],facetest[0]),(facetest[1],facetest[2]),(0,255,0),3)
+# COMPARE THE ENCODING OF TWO IMAGES AND RETURN BOOLEAN VALUES
+res=face_recognition.compare_faces([encodeFace],encodetestFace)
+#
+face_Dis=face_recognition.face_distance([encodeFace],encodetestFace)
+print(res,face_Dis)
+# img,text,position(50,50),fontface,fontscale,color,thickness
+cv2.putText(img1test,f"{res}{round(face_Dis[0],2)}",(50,50),cv2.FONT_HERSHEY_SIMPLEX,1,(0,0,255),2)
+#  DISPLAY THE  IMAGE
+cv2.imshow("Obama",img1)
+cv2.imshow("Obama Test",img1test)
+cv2.waitKey()
+cv2.destroyAllWindows()
+
